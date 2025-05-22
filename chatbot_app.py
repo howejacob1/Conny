@@ -1,9 +1,12 @@
 import streamlit as st
 import openai
 
-st.set_page_config(page_title="ChatGPT Clone", page_icon="🤖", layout="centered")
+st.set_page_config(page_title="Conny", layout="centered")
 
-st.title("ChatGPT Clone 🤖")
+# Centered title using markdown and HTML
+st.markdown("""
+    <h1 style='text-align: center;'>Conny</h1>
+""", unsafe_allow_html=True)
 
 # Load OpenAI API key from Streamlit secrets
 oai_key = st.secrets["openai"]["api_key"]
