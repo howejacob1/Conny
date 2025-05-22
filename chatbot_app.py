@@ -1,5 +1,6 @@
 import streamlit as st
 import openai
+from pymongo import MongoClient
 
 st.set_page_config(page_title="Conny", layout="centered")
 
@@ -11,6 +12,30 @@ st.markdown("""
 # Load OpenAI API key from Streamlit secrets
 oai_key = st.secrets["openai"]["api_key"]
 openai.api_key = oai_key
+
+# Load MongoDB credentials from Streamlit secrets
+mongo_uri = st.secrets["mongo_db"]["url"]
+mongo_db = st.secrets["mongo_db"]["db"]
+mongo_collection = st.secrets["mongo_db"]["collection"]
+
+# Connect to MongoDB
+client = MongoClient(mongo_uri)
+db = client[mongo_db]
+collection = db[mongo_collection]
+
+def get_vcons():
+    return list(collection.find())
+
+# Button to display vcons
+def display_vcons():
+    vcons = get_vcons()
+    if not vcons:
+        st.info("No vcons found.")
+    for vcon in vcons:
+        st.json(vcon)
+
+if st.button("Show all vcons"):
+    display_vcons()
 
 MODEL = "gpt-4-1106-preview"  # GPT-4.1 model name
 
